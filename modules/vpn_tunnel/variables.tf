@@ -30,3 +30,10 @@ variable "tunnel2_inside_cidr" {
   description = "Link-local inside CIDR voor redundante tunnel 2"
   type        = string
 }
+
+variable "tunnel1_preshared_key" {
+  description = "Pre-shared key voor IPsec Tunnel 1"
+  type        = string
+  sensitive   = true
+  default     = "InnovaTech2026SuperSecretKey"
+}

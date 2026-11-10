@@ -60,6 +60,11 @@ output "vpn_tunnel1_inside_vgw_ip" {
   value       = module.vpn_tunnel.tunnel1_vgw_inside_address
 }
 
+output "observability_test_private_ip" {
+  description = "Privé IP-adres van de ultra-lightweight test EC2 node in AWS Observability Subnet"
+  value       = aws_instance.observability_test.private_ip
+}
+
 # Security Outputs
 output "observability_security_group_id" {
   description = "Security Group ID voor de Observability stack"

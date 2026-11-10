@@ -82,3 +82,10 @@ variable "vpn_tunnel2_inside_cidr" {
   type        = string
   default     = "169.254.11.0/30"
 }
+
+variable "vpn_tunnel1_preshared_key" {
+  description = "Pre-shared key voor IPsec Tunnel 1"
+  type        = string
+  sensitive   = true
+  default     = "InnovaTech2026SuperSecretKey"
+}

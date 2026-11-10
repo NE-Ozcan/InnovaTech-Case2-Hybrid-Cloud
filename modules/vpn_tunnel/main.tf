@@ -12,6 +12,10 @@ resource "aws_customer_gateway" "onprem_cgw" {
     Name = "${var.project_name}-${var.environment}-onprem-cgw"
     Zone = "On-Premises-Perimeter"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 # 2. Site-to-Site VPN Connection (Dubbele redundante IPsec tunnels)
@@ -23,6 +27,7 @@ resource "aws_vpn_connection" "hybrid_vpn" {
 
   # Tunnel 1 Inside Network & Crypto Specificaties (IKEv2 & AES-256)
   tunnel1_inside_cidr                  = var.tunnel1_inside_cidr
+  tunnel1_preshared_key                = var.tunnel1_preshared_key
   tunnel1_ike_versions                 = ["ikev2"]
   tunnel1_phase1_encryption_algorithms = ["AES256", "AES256-GCM-16"]
   tunnel1_phase1_integrity_algorithms  = ["SHA2-256"]

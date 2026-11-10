@@ -54,6 +54,15 @@ resource "aws_security_group" "observability_sg" {
   description = "Inname van logs en metrics via de beveiligde hybride route"
   vpc_id      = var.cloud_hub_vpc_id
 
+  # ICMP Ping voor Hybride VPN Verificatie
+  ingress {
+    description = "ICMP Echo Request vanaf On-Premises en Hub"
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = [var.onprem_cidr, var.cloud_hub_cidr]
+  }
+
   # Logbron 1: Syslog (Netwerk- & Firewall-logs)
   ingress {
     description = "Centrale Syslog UDP 514 van On-Premises en Hub"
@@ -107,12 +116,12 @@ resource "aws_security_group" "observability_sg" {
     cidr_blocks = [var.soar_subnet_cidr]
   }
 
-  # Generieke interne egress
+  # Generieke hybride & interne egress (voor replies over VPN)
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [var.cloud_hub_cidr]
+    cidr_blocks = [var.cloud_hub_cidr, var.onprem_cidr]
   }
 
   tags = {
