@@ -1,0 +1,126 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "HYBRIDE VPN TUNNEL & ON-PREMISES STATUS (EDUCLOUD)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "green", "value": 1 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 1 },
+      "id": 2,
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "orientation": "auto",
+        "textMode": "auto"
+      },
+      "title": "IPsec Tunnel Status (IKEv2 pfSense)",
+      "type": "stat",
+      "targets": [
+        {
+          "expr": "pfsense_ipsec_status{tunnel=\"AWS-Cloud-Hub\"}",
+          "legendFormat": "Tunnel 1 (3.75.22.26)"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "pps"
+        }
+      },
+      "gridPos": { "h": 7, "w": 18, "x": 6, "y": 1 },
+      "id": 3,
+      "title": "Hybride Tunnel Packets (EduCloud Out ➔ AWS Echo-Reply In)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "rate(pfsense_ipsec_packets_out{tunnel=\"AWS-Cloud-Hub\"}[1m])",
+          "legendFormat": "Packets Out (192.168.1.0/24 ➔ 10.0.0.0/8)"
+        },
+        {
+          "expr": "rate(pfsense_ipsec_packets_in{tunnel=\"AWS-Cloud-Hub\"}[1m])",
+          "legendFormat": "Packets In (Echo Reply 10.10.10.40)"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 8 },
+      "id": 4,
+      "title": "SECURITY AUDIT & SOAR AUTONOMOUS MITIGATION (LOKI + PROMTAIL)",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 9 },
+      "id": 5,
+      "title": "SSH Failed Logins Stream (/var/log/auth.log)",
+      "type": "logs",
+      "targets": [
+        {
+          "expr": "{job=\"onprem-servers\"} |= \"Failed password\"",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "showLabels": true,
+        "wrapLogMessage": true
+      }
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 9 },
+      "id": 6,
+      "title": "Actieve SOAR Mitigaties (iptables DROP Actions)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "expr": "soar_blocked_attackers_total",
+          "legendFormat": "Geblokkeerde Attackers (192.168.10.45)"
+        }
+      ]
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "tags": ["innovatech", "case2", "hybrid-cloud", "soar", "loki", "prometheus"],
+  "time": { "from": "now-15m", "to": "now" },
+  "title": "InnovaTech - Hybride Cloud & SOAR Observability Dashboard",
+  "version": 1
+}
