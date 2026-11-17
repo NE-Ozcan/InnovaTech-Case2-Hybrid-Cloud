@@ -25,7 +25,7 @@ from collections import defaultdict
 
 # Configuratie drempelwaarden (Thresholds)
 SCAN_PORT_THRESHOLD = 5       # Maximaal unieke poorten per tijdvenster
-BRUTE_FORCE_THRESHOLD = 3     # Maximaal connecties/pogingen op poort 22 binnen tijdvenster
+BRUTE_FORCE_THRESHOLD = 5     # Maximaal connecties/pogingen op poort 22 binnen tijdvenster
 TIME_WINDOW_SEC = 5           # Tijdvenster in seconden
 WEBHOOK_URL = os.environ.get("ALERT_WEBHOOK_URL", "")
 
