@@ -32,14 +32,14 @@ module "cloud_hub" {
 module "vpn_tunnel" {
   source = "./modules/vpn_tunnel"
 
-  project_name        = var.project_name
-  environment         = var.environment
-  vpn_gateway_id      = module.cloud_hub.vpn_gateway_id
-  customer_gateway_ip = "145.220.72.5"
-  onprem_cidr               = var.onprem_cidr
-  tunnel1_inside_cidr       = var.vpn_tunnel1_inside_cidr
-  tunnel2_inside_cidr       = var.vpn_tunnel2_inside_cidr
-  tunnel1_preshared_key     = var.vpn_tunnel1_preshared_key
+  project_name          = var.project_name
+  environment           = var.environment
+  vpn_gateway_id        = module.cloud_hub.vpn_gateway_id
+  customer_gateway_ip   = "145.220.72.5"
+  onprem_cidr           = var.onprem_cidr
+  tunnel1_inside_cidr   = var.vpn_tunnel1_inside_cidr
+  tunnel2_inside_cidr   = var.vpn_tunnel2_inside_cidr
+  tunnel1_preshared_key = var.vpn_tunnel1_preshared_key
 }
 
 # 4. Zero-Trust Security Module (Network Isolation & Policy Enforcement)
