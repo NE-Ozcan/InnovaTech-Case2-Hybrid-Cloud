@@ -1,0 +1,56 @@
+name: "InnovaTech Case 2 - OpenTofu & SOAR CI Pipeline (REQ-NCA-P2-11)"
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  validate-iac:
+    name: "1. OpenTofu IaC Validation & Quality Gate"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: "1.8.2"
+
+      - name: Verify OpenTofu Formatting (tofu fmt)
+        run: |
+          tofu fmt -check
+
+      - name: OpenTofu Init (Offline Provider Check)
+        run: |
+          tofu init -backend=false
+
+      - name: OpenTofu Validate (Syntax & Types)
+        run: |
+          tofu validate
+
+  verify-soar-scripts:
+    name: "2. SOAR Active Defense & Attack Scripts Syntax"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Lint SOAR Monitor Script
+        run: |
+          python3 -m py_compile scripts/traffic_monitor.py
+          echo "✔ SOAR Engine traffic_monitor.py syntax 100% OK!"
+
+      - name: Validate Attack Bash Scripts
+        run: |
+          bash -n scripts/attack_ssh_bruteforce.sh
+          bash -n scripts/attack_cryptominer.sh
+          echo "✔ Aanvalsscripts syntaxis 100% OK!"
